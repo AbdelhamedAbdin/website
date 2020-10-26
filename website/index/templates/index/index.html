@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %} Index Page {% endblock %}
+
+{% block body %}
+    <!-- Start Cover -->
+    <div class="cover text-center">
+        <div class="overlay">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="welcoming">
+                            <h1>Es2al</h1>
+                            <h2>Develope YourSelf Right Now<br> And Learn More By Question In Any Fields You Want</h2>
+                            <a href="{% url 'accounts:register' %}" class="btn btn-primary">Sign Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Start Why us -->
+    <div class="why-us">
+        <div class="container">
+            <div class="row">
+                <div class="facing text-center">
+                    <h2>Welcome To Our Website</h2>
+                    <p class="lead">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                </div>
+                <div class="text-center">
+                    <div class="shape col-md-3 col-xs-12">
+                        <i class="fa fa-diamond"></i>
+                        <h2 class="text-primary">Be Creative</h2>
+                        <p class="lead">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="shape col-md-3 col-xs-12">
+                        <i class="fa fa-book"></i>
+                        <h2 class="text-primary">Be Learner</h2>
+                        <p class="lead">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="shape col-md-3 col-xs-12">
+                        <i class="fa fa-handshake-o"></i>
+                        <h2 class="text-primary">Be Successful</h2>
+                        <p class="lead">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Start About us -->
+    <div class="aboutus">
+        <div class="covering">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2 class="text-center">About Us</h2>
+                        <p class="lead text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                        <a href="{% url 'index:about_us' %}" class="btn btn-primary text-center">AboutUs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Start Contact-us -->
+    <div class="contact-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="contact text-center">
+                        <h2>Contact Us</h2>
+                        <p class="lead">You can contact us by one of our clients to resolve any problem you are facing<br> just click on this button to get our number phone</p>
+                        <a class="btn btn-primary text-center">Call Now</a>
+                        <p class="number lead text-primary">+01067296316</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Start Footer -->
+    {% include 'base_footer.html' %}
+{% endblock %}

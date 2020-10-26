@@ -1,0 +1,17 @@
+{% if user.is_authenticated %}
+    <form method="post" class="hide my-form">
+        {% csrf_token %}
+        <div class="row">
+            {% for field in comment_form %}
+            <div class="col-sm-10">
+                <div class="form-group">
+                    {{ field }}
+                </div>
+            </div>
+            <div class="col-sm-1 add-comment-field">
+                <button type="submit" class="btn btn-primary btn-lg">Add Comment</button>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+{% endif %}

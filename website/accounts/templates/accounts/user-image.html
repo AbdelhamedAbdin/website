@@ -1,0 +1,18 @@
+{% extends 'base_staticfiles.html' %}
+{% block title %} User Image {% endblock %}
+
+{% block body %}
+    <div class="user-image">
+        <div class="overlay">
+            <div class="row">
+                <div class="container">
+                    <div class="user-logo">
+                        <img class="img-responsive my-logo"
+                             src="{{ userprofile.logo.url }}" alt="{{ userprofile.slug }}"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

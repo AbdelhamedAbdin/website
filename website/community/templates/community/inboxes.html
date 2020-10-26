@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %} {{ request.user.get_full_name }} Notifications {% endblock %}
+{% block body %}
+    {% if request.user.notifications.all.count != 0 %}
+    <div class="all-notifications">
+        <div class="container">
+            <div class="about-item">
+                <h2>All {{ request.user.first_name }} Notifications</h2>
+                <ul class="read-options list-unstyled">
+                    <li>
+                        <a href="{% url 'community:mark_all' %}">Mark all as read</a>
+                    </li>
+                    <li>|</li>
+                    <li>
+                        <a class="remove-all" href="{% url 'community:remove_all' %}">Remove all</a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <ul class="list-unstyled">
+                {% for inbox_list in notifies %}
+                    <li class="actor">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <img style="width: 30px;height: 30px" class="img-rounded" src="
+                                {% if inbox_list.actor.userprofile.logo %}
+                                    {{ inbox_list.actor.userprofile.logo.url }}
+                                {% else %}
+                                    {% load static %}
+                                    {% static 'index/images/default-logo.jpg' %}
+                                {% endif %}
+                                ">
+                                <span>
+                                    {{ inbox_list.actor.first_name }}
+                                    {{ inbox_list.verb }} post
+                                </span>
+                                <p class="inbox-text">
+                                    {% if not inbox_list.unread %}
+                                    <a href="{% url 'community:question_view' inbox_list.action_object.ask_slug %}">
+                                        {{ inbox_list.action_object.title }}
+                                    </a>
+                                    <p>read message</p>
+                                    {% else %}
+                                    <a href="{% url 'community:inbox_read_view' inbox_list.action_object_object_id %}">
+                                        {{ inbox_list.action_object.title }}
+                                    </a>
+                                    <p style="color: #f00">unread message!</p>
+                                    {% endif %}
+                                </p>
+                                <p>{{ inbox_list.timesince }}</p>
+                            </div>
+                            <div class="col-xs-2 remove-notify">
+                                <a href="{% url 'community:remove_notify' inbox_list.id %}">Remove</a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% else %}
+        <div class="all-notifications">
+            <div class="container">
+                <h3 class="text-center">
+                    <strong>you have no notification yet</strong>
+                </h3>
+            </div>
+        </div>
+    {% endif %}
+{% include 'base_footer.html' %}
+{% endblock %}

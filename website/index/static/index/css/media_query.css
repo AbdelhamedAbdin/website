@@ -1,0 +1,92 @@
+@media (max-width: 767px) {
+    .footer p {
+        text-align: center !important;
+    }
+    .why-us .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .navbar {padding-bottom: 10px !important;}
+    .navbar .nav li {
+        text-align: center;
+    }
+    .navbar-inverse .navbar-nav .open .dropdown-menu .divider {
+        color: #FFF !important;
+        background: #FFF !important;
+    }
+    .profile .logo-image {width: 100% !important;}
+    .profile .thumbnail {width: 100%}
+    .profile .thumbnail .col-xs-12 {
+        width: 100% !important;
+    }
+    .profile .my-image:hover span {height: 20%}
+    .profile .col-md-1 {
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%
+    }
+    div.options .post-option {
+        margin-left: 15%
+    }
+    .change-image .add-image h1 {
+        font-size: 22px;
+    }
+}
+@media (min-width: 767px) {
+    .navbar {
+        height: 0;
+    }
+    .login, .register, .all-questions, .profile,
+    .edit-form, .all-notifications, .user-loggedin {
+        min-height: 400px !important;
+    }
+}
+@media screen and (max-width: 768px) {
+    form.search .btn {
+        width: 100% !important;
+    }
+    .add-comment-field {
+        margin-bottom: 15px !important;
+    }
+    ul.inbox .inbox-empty {
+        margin-top: 25% !important;
+    }
+    .nav .notify-count {
+        font-size: 15px !important;
+        padding: 2px 4px !important;
+        right: 46.5% !important;
+        bottom: 3px !important;
+    }
+    .user-image .user-logo {
+        width: fit-content !important;
+    }
+    ul.inbox li p {
+        margin-left: 30% !important;
+    }
+    .all-notifications .list-unstyled li p {
+        margin-left: 6% !important;
+    }
+    .all-notifications .list-unstyled li p.inbox-text {
+        max-width: 30% !important;
+    }
+    .all-notifications .remove-notify {
+        margin-top: 13% !important;
+    }
+    .login .account-wall {
+        margin: auto;
+        max-width: 80% !important;
+    }
+    .login, .register, .all-questions, .profile,
+    .edit-form, .all-notifications, .user-loggedin {
+        min-height: 784px !important;
+    }
+    .login .form-signin {
+        padding: 0 !important;
+    }
+    .login .col-sm-6 {
+        margin-top: 20% !important;
+    }
+    .profile .thumbnail {
+        width: 100% !important;
+    }
+}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %} {{ user.get_full_name }} Profile {% endblock %}
+
+{% block body %}
+    <!-- User Profile Section -->
+    {% if user.is_authenticated %}
+    <div class="profile">
+        <div class="container-fluid">
+            <div class="col-md-1">
+                <div class="thumbnail">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- Profile View Section -->
+                            <div class="logo-image text-center">
+                                {% if userprofile.logo %}
+                                <div class="my-image">
+                                    <a href="{% url 'accounts:user_image' userprofile.slug %}">
+                                        <img class="img-responsive" src="{{ userprofile.logo.url }}">
+                                    </a>
+                                    {% if userprofile.slug == user.userprofile.slug %}
+                                    <span>
+                                        <a href="{% url 'accounts:add_avatar' userprofile.slug %}" class="fa fa-camera fa-1x text-center">
+                                            <p>Upload Image</p>
+                                        </a>
+                                    </span>
+                                    {% endif %}
+                                </div>
+
+                                {% else %}
+
+                                {% load static %}
+                                <div class="my-image">
+                                    <img class="img-responsive img-thumbnail" src="{% static 'index/images/default-logo.jpg' %}">
+                                    {% if userprofile.slug == user.userprofile.slug %}
+                                    <span>
+                                        <a href="{% url 'accounts:add_avatar' userprofile.slug %}" class="fa fa-camera fa-1x text-center">
+                                            <p>Upload Image</p>
+                                        </a>
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                {% if userprofile.user.first_name != '' and userprofile.user.last_name != '' %}
+                                    <h4>{{ userprofile.user.first_name }} {{ userprofile.user.last_name }}</h4>
+                                {% else %}
+                                    <h4>User Profile</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="caption">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li role="presentation" class="active"><a href="#overview" class="trigger" data-target="#overview">Overview</a></li>
+                                <li role="presentation" class=""><a href="#personal-information" class="trigger" data-target="#personal-information">Personal Information</a></li>
+                                <li role="presentation" class=""><a href="#my-skills" class="trigger" data-target="#my-skills">Skills</a></li>
+                            </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Information Sections -->
+            <div class="col-md-8 col-md-offset-3 information">
+                <div class="overview show" id="overview">
+                    <h2 class="line">Overview</h2>
+                    <p class="lead">{{ userprofile.overview }}</p>
+                    {% if userprofile.slug == user.userprofile.slug %}
+                        <a data-placement="bottom" title="update overview"  class="fa fa-edit" data-toggle="modal" data-tooltip="tooltip" data-target=".overview_info"></a>
+                    {% endif %}
+                </div>
+                <div class="personal-info" id="personal-information">
+                    <h2 class="line">Personal Information</h2>
+                    <p class="lead">City: {{ userprofile.city }}</p>
+                    <p class="lead">Phone Number: 0{{ userprofile.phone }}</p>
+                    <p class="lead">Sex: {{ userprofile.sex }}</p>
+                    {% if userprofile.slug == user.userprofile.slug %}
+                        <a data-placement="bottom" title="update personal information"  class="fa fa-edit" data-toggle="modal" data-tooltip="tooltip" data-target=".personal_info"></a>
+                    {% endif %}
+                </div>
+                <div class="skill" id="my-skills">
+                    <h2 class="line">Skills:</h2>
+                    <p class="lead">{{ userprofile.skill }}</p>
+                    {% if userprofile.slug == user.userprofile.slug %}
+                        <a data-placement="bottom" title="update skills" class="fa fa-edit" data-toggle="modal" data-tooltip="tooltip" data-target=".skills"></a>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- get all questions -->
+            {% if userprofile.userasking_set.all %}
+            <div class="col-md-8 col-md-offset-3 user_questions">
+                {% if userprofile.slug == user.userprofile.slug %}
+                <h2 class="line">All Questions You Asked</h2>
+                {% else %}
+                <h2 class="line">All Questions "{{ userprofile.user.first_name }}" Asked</h2>
+                {% endif %}
+                {% for questions in userprofile.userasking_set.all %}
+                    <p><a href="{% url 'community:question_view' questions.ask_slug %}">{{ questions.title }}</a></p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <!-- get favourites -->
+            {% if get_favourite %}
+            <div class="col-md-8 col-md-offset-3 user_questions">
+                <h2 class="line">Favourites</h2>
+                {% for fav in get_favourite %}
+                    <p><a href="{% url 'community:question_view' fav.ask_slug %}">{{ fav.title }}</a></p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    {% if userprofile.slug == user.userprofile.slug %}
+        {% include 'accounts/information_form.html' %}
+    {% endif %}
+
+    </div>
+        {% include 'base_footer.html' %}
+    {% endif %}
+{% endblock %}

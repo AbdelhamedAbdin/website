@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %} About Us {% endblock %}
+
+{% block body %}
+<div class="who-is-this">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-md-6">
+                    <div class="about-me">
+                        <h2>About Us</h2>
+                        <p class="text-primary">Adminstrator</p>
+                        <p class="lead">
+                            I'm Abdelhamed Abdin. i'm in Egypt. I work a programmer. I love all programming languages specially that language depending on web or security.<br>
+                            firstly, i was FrontEnd Developer then i shift this career and choiced what i love and what i belong to.<br>
+                            Now, I became work as BackEnd Developer. I was as freelancer in some tasks little bit simple.<br>
+                            you can following me on these accounts that you see below:<br>
+                            <ul>
+                                <li class="lead"><a href="https://www.linkedin.com/in/abdelhamed-abdin-21118914a/">my account on linkedin</a></li>
+                                <li class="lead"><a href="https://www.facebook.com/medo.abdin?ref=bookmarks">my account on Facebook</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-md-push-2">
+                    <div class="image">
+                        {% load static %}
+                        <img class="img-responsive thumbnail" src="{% static 'index/images/about-me.jpg' %}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'base_footer.html' %}
+
+{% endblock %}

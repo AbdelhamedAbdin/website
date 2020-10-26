@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% block title %} {{ my_question.title }} {% endblock %}
+{% block body %}
+    <!-- Full Question View -->
+    <div class="my_question">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="like">
+                        <div class="like-form">
+                            <div class="like-count">
+                                {% if my_question.likes.count > 0 %}
+                                    +{{ my_question.likes.count }}
+                                {% else %}
+                                    {{ my_question.likes.count }}
+                                {% endif %}
+                            </div>
+                            <form method="post" action="{% url 'community:like' my_question.ask_slug %}">
+                                {% csrf_token %}
+                                {% if is_liked %}
+                                    <button class="text-primary" name="post_slug" value="{{ my_question.ask_slug }}"><i class="fa fa-sort-asc"></i></button>
+                                {% else %}
+                                    <button name="post_slug" value="{{ my_question.ask_slug }}"><i class="fa fa-sort-asc"></i></button>
+                                {% endif %}
+                            </form>
+                        </div>
+                        <div class="like-form">
+                            <div class="dislike-count">
+                                {% if my_question.dislikes.count > 0 %}
+                                    -{{ my_question.dislikes.count }}
+                                {% else %}
+                                    {{ my_question.dislikes.count }}
+                                {% endif %}
+                            </div>
+                            <form method="post" action="{% url 'community:dislike' my_question.ask_slug %}">
+                                {% csrf_token %}
+                                {% if is_dislike %}
+                                    <button class="text-danger" name="post_dislike_slug" value="{{ my_question.ask_slug }}"><i class="fa fa-sort-desc"></i></button>
+                                {% else %}
+                                    <button name="post_dislike_slug" value="{{ my_question.ask_slug }}"><i class="fa fa-sort-desc"></i></button>
+                                {% endif %}
+                            </form>
+                        </div>
+                        <div class="likes">
+                            {% if my_question.likes.count != 0 or my_question.dislikes.count != 0 %}
+                                <div>
+                                    <button data-toggle="modal" data-target="#post--effect-zoomIn">
+                                        {{ summation }}
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div>{{ summation }}</div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="favourite">
+                        <form method="post" action="{% url 'community:favourite' my_question.ask_slug %}">
+                            {% csrf_token %}
+                            {% if favorite %}
+                                <button class="text-warning" name="save-fav" value="{{ my_question.ask_slug }}">
+                                    <i class="fa fa-star"></i>
+                                </button>
+                            {% else %}
+                                <button name="save-fav" value="{{ my_question.ask_slug }}">
+                                    <i class="fa fa-star"></i>
+                                </button>
+                            {% endif %}
+                        </form>
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if 'unsaved' in message.tags or 'saved' in message.tags %}
+                                    <div class="message">
+                                        <div>{{ message }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-xs-10">
+                    <div class="answer-question">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="title">
+                                    <h3 class="text-primary">{{ my_question.title }}</h3>
+                                </div>
+                                <div class="question">
+                                    <p class="">{{ my_question.question }}</p>
+                                </div>
+                                <div class="field">
+                                    <span>{{ my_question.field }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Options e.g 'Edit, Comment, Delete etc...' -->
+    <div class="options">
+        <div class="container">
+            <div class="post-option col-sm-6 col-sm-offset-2">
+                {% if user.is_authenticated %}
+                    <div class="comment-post">
+                        <a data-showin=".my-form" class="showin">Comment</a>
+                    </div>
+                    {% if my_question.userprofile.user.username == request.user.username %}
+                    <div class="delete-post">
+                        <a data-toggle="modal" data-target="#delete-post">Delete</a>
+                    </div>
+                    <div class="update-post">
+                        <a href="{% url 'community:update_post' my_question.ask_slug %}">Edit</a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <!-- the user who ask this question -->
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="users">
+                        <div class="fl-right">
+                            <div class="date-user-q">
+                                <div class="avatar">
+                                    <a href="{% url 'accounts:view_profile' my_question.userprofile.slug %}">
+                                        <img class="img-rounded img-fluid" style="width: 50px;height:50px;display: inline-block" src="
+                                        {% if my_question.userprofile.logo %}
+                                            {{ my_question.userprofile.logo.url }}
+                                        {% else %}
+                                            {% load static %}
+                                            {% static 'index/images/default-logo.jpg' %}
+                                        {% endif %}
+                                        ">
+                                    </a>
+                                </div>
+                                <a href="{% url 'accounts:view_profile' my_question.userprofile.slug %}">
+                                {% if my_question.userprofile.user.first_name != '' and my_question.userprofile.user.last_name != '' %}
+                                {{ my_question.userprofile.user.first_name }} {{ my_question.userprofile.user.last_name }}
+                                {% else %}
+                                    User Account
+                                {% endif %}
+                                </a>
+                                <p class="">{{ userasking.date|date:"D d, M, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- add comments and options for comments -->
+
+    <div class="options">
+        <div class="container">
+            <div class="clearfix"></div>
+            <!-- The count of comments -->
+            <div class="count text-center">
+                {% if comments_count > 0 %}
+                    <div>{{ comments_count }} Answers</div>
+                {% else %}
+                    <div>No Answer Yet</div>
+                {% endif %}
+            </div>
+            <hr>
+            <!-- Comment Text -->
+            <div class="user-answer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        {% for comment in my_question.comment_set.all %}
+                            <div class="comments">
+                                <div class="col-xs-0">
+                                    <div class="avatar">
+                                        <a href="{% url 'accounts:view_profile' comment.username %}">
+                                            <img class="img-circle img-thumbnail" style="width:50px; height: 50px;" src="{{ comment.logo }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-xs-10">
+                                     <!-- --Comment itself-- -->
+                                    <div class="user_comment">
+                                        <p>{{ comment }}</p>
+                                        <div class="fa fa-caret-left comment-arrow"></div>
+                                        {% if request.user.username == comment.username %}
+                                        <div class="dropdown">
+                                            <button class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <!-- --Edit comment-- -->
+                                                <li>
+                                                    <div class="edit-comment">
+                                                        <a href="{% url 'community:update_comment' comment.pk %}">Edit</a>
+                                                    </div>
+                                                </li>
+                                                <!-- --Delete comment-- -->
+                                                <li>
+                                                    <div class="delete-comment">
+                                                        <form method="post" action="{% url 'community:delete_comment' comment.pk %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="delete-comment" value="{{ comment.comment }}">
+                                                            <input type="submit" value="Delete">
+                                                        </form>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <!-- start Options in comment -->
+                                    <div class="sub-options">
+                                        <!-- --comment Date-- -->
+                                        <div class="comment-count">
+                                            {% if comment.likes.count != 0 %}
+                                                {{ comment.likes.count }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="like-comment">
+                                            <form method="post" action="{% url 'community:like_comment' comment.pk %}">
+                                                {% csrf_token %}
+                                                <button name="like-comment" value="{{ comment.pk }}">
+                                                    <i class="fa fa-thumbs-o-up"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div style="display: inline-block;color: #8e8e8e" class="comment-date">
+                                            <p>{{ comment.date|date:"D j, M, Y" }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="clearfix"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- Comment Field -->
+            {% include 'community/comment_form.html' %}
+        </div>
+    </div>
+
+    <!-- show all users who likes or dislikes this post -->
+   <div class="modal fade" id="post--effect-zoomIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="myModalLabel">like and dislike view</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                   <div class="container">
+                       {% for likes in my_question.likes.all %}
+                           <div class="user-likes">
+                               <a href="{% url 'accounts:view_profile' likes %}">
+                                   {{ likes }}
+                               </a>
+                               <i class="fa fa-sort-asc fa-lg text-primary"></i>
+                           </div>
+                       {% endfor %}
+                       {% for dislikes in my_question.dislikes.all %}
+                           <div class="user-likes">
+                               <a href="{% url 'accounts:view_profile' dislikes %}">{{ dislikes }}</a>
+                               <i class="fa fa-sort-desc fa-lg text-danger"></i>
+                           </div>
+                       {% endfor %}
+                   </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+    <!-- show all users who likes or dislikes this comment -->
+   <div class="modal fade" id="comment--effect-zoomIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="myModalLabel">like and dislike view</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                   <div class="container">
+                       {% for likes in my_question.likes.all %}
+                           <div class="user-likes">
+                               <a href="{% url 'accounts:view_profile' likes %}">
+                                   {{ likes }}
+                               </a>
+                               <i class="fa fa-sort-asc fa-lg text-primary"></i>
+                           </div>
+                       {% endfor %}
+                       {% for dislikes in my_question.dislikes.all %}
+                           <div class="user-likes">
+                               <a href="{% url 'accounts:view_profile' dislikes %}">{{ dislikes }}</a>
+                               <i class="fa fa-sort-desc fa-lg text-danger"></i>
+                           </div>
+                       {% endfor %}
+                   </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+  <!-- Modal to delete post -->
+  <div class="modal fade" id="delete-post" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-danger">Warning!</h4>
+        </div>
+        <div class="modal-body">
+          <p>You are about to remove your post click delete button if you want to remove that post or close.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        {% if my_question.userprofile.user.username == request.user.username %}
+        <div class="delete-post">
+            <form action="{% url 'community:delete_post' my_question.ask_slug %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="delete_form" value={{ my_question.ask_slug }}>
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+        </div>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    {% include 'base_footer.html' %}
+{% endblock %}

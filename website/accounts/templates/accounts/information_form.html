@@ -1,0 +1,72 @@
+    <!--  Update Overview  -->
+    <div class="modal fade overview_info" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="container">
+                    <div class="form-group">
+                        <form method="post">
+                            {% csrf_token %}
+                            <label>Overview:</label>
+                            <p class="col-xs-12">{{ form.overview }}</p>
+                            <div class="exception">
+                                <p class="col-xs-12">{{ form.city }}</p>
+                                <p class="col-xs-12">{{ form.phone }}</p>
+                                <p class="col-xs-12">{{ form.sex }}</p>
+                                <p class="col-xs-12">{{ form.skill }}</p>
+                            </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Update Personal Information  -->
+    <div class="modal fade personal_info" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="container">
+                    <div class="form-group row">
+                        <form method="post">
+                            {% csrf_token %}
+                            <label>City:</label>
+                            <p class="col-xs-12">{{ form.city }}</p>
+                            <label>Phone:</label>
+                            <p class="col-xs-12">{{ form.phone }}</p>
+                            <label>Sex:</label>
+                            <p class="col-xs-12">{{ form.sex }}</p>
+                            <div class="exception">
+                                <p class="col-xs-12">{{ form.overview }}</p>
+                                <p class="col-xs-12">{{ form.skill }}</p>
+                            </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Update Skills Section  -->
+    <div class="modal fade skills" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="container">
+                    <div class="form-group row">
+                        <form method="post">
+                            {% csrf_token %}
+                            <label>Skills:</label>
+                            <p class="col-xs-12">{{ form.skill }}</p>
+                            <div class="exception">
+                                <p class="col-xs-12">{{ form.overview }}</p>
+                                <p class="col-xs-12">{{ form.city }}</p>
+                                <p class="col-xs-12">{{ form.phone }}</p>
+                                <p class="col-xs-12">{{ form.sex }}</p>
+                                <p class="col-xs-12">{{ form.skill }}</p>
+                            </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

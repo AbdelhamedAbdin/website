@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div class="user-exist">
+        <div class="container text-center">
+            <h2 class="text-danger">This user is already exists</h2>
+            <div class="text-info">
+                <p style="font-size: 16px !important;font-weight: bold!important;">do you forget your password? <a href="{% url 'accounts:password_reset' %}">Check here</a></p>
+            </div>
+        </div>
+    </div>
+
+{% include 'base_footer.html' %}
+{% endblock %}

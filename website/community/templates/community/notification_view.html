@@ -1,0 +1,100 @@
+{% load notifications_tags %}
+{% notifications_unread as unread_count %}
+{% if unread_count %}
+    <span class="text-left">
+        <strong>{{ unread_count }}</strong>
+        unread notifications
+    </span>
+    <a href="{% url 'community:all_items' %}" class="text-right all-items">
+        all items
+    </a>
+{% elif request.user.notifications.read.count > 0 %}
+    <span class="text-left">
+        <strong>{{ unread_count }}</strong>
+        unread notifications
+    </span>
+    <a href="{% url 'community:all_items' %}" class="text-right all-items">
+        all items
+    </a>
+{% endif %}
+
+{% if unread_count != 0 %}
+    {% for inbox_list in inbox.unread %}
+        <li>
+            <a class="unread" style="color: #f00 !important;" href="{% url 'community:inbox_read_view' inbox_list.action_object_object_id %}">
+                <div class="actors">
+                    <img style="width: 30px;height: 30px" class="img-rounded" src="
+                    {% if inbox_list.actor.userprofile.logo %}
+                        {{ inbox_list.actor.userprofile.logo.url }}
+                    {% else %}
+                        {% load static %}
+                        {% static 'index/images/default-logo.jpg' %}
+                    {% endif %}
+                    ">
+                    <span>
+                        {{ inbox_list.actor.first_name }}
+                        {{ inbox_list.verb }} post
+                    </span>
+                    <p>"{{ inbox_list.action_object.title }}"</p>
+                    <p>{{ inbox_list.timesince }}</p>
+                </div>
+            </a>
+            <div class="divider"></div>
+            <span class="fa fa-envelope notif-message"></span>
+        </li>
+    {% endfor %}
+
+    {% for inbox_list in inbox.read %}
+        <li>
+            <a class="read" style="color: #000 !important;" href="{% url 'community:question_view' inbox_list.action_object.ask_slug %}">
+                <div class="actor">
+                    <img style="width: 30px;height: 30px" class="img-rounded" src="
+                    {% if inbox_list.actor.userprofile.logo %}
+                        {{ inbox_list.actor.userprofile.logo.url }}
+                    {% else %}
+                        {% load static %}
+                        {% static 'index/images/default-logo.jpg' %}
+                    {% endif %}
+                    ">
+                    <span>
+                        {{ inbox_list.actor.first_name }}
+                        {{ inbox_list.verb }} post
+                    </span>
+                    <p>"{{ inbox_list.action_object.title }}"</p>
+                    <p>{{ inbox_list.timesince }}</p>
+                </div>
+            </a>
+            <div class="divider"></div>
+            <span class="fa fa-envelope-open notif-message"></span>
+        </li>
+    {% endfor %}
+{% elif request.user.notifications.unread.count == 0 and request.user.notifications.read.count > 0 %}
+    {% for inbox_list in inbox.read %}
+        <li>
+            <a class="read" style="color: #000 !important;" href="{% url 'community:question_view' inbox_list.action_object.ask_slug %}">
+                <div class="actor">
+                    <img style="width: 30px;height: 30px" class="img-rounded" src="
+                    {% if inbox_list.actor.userprofile.logo %}
+                        {{ inbox_list.actor.userprofile.logo.url }}
+                    {% else %}
+                        {% load static %}
+                        {% static 'index/images/default-logo.jpg' %}
+                    {% endif %}
+                    ">
+                    <span>
+                        {{ inbox_list.actor.first_name }}
+                        {{ inbox_list.verb }} post
+                    </span>
+                    <p>"{{ inbox_list.action_object.title }}"</p>
+                    <p>{{ inbox_list.timesince }}</p>
+                </div>
+            </a>
+            <div class="divider"></div>
+            <span class="fa fa-envelope-open notif-message"></span>
+        </li>
+    {% endfor %}
+{% else %}
+    <div class="inbox-empty text-center">
+        <p>you have no notification yet</p>
+    </div>
+{% endif %}

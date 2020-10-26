@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Base Staticfiles {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index/css/bootstrap.css' %}" />
+    <link rel="stylesheet" href="{% static 'index/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'index/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'index/css/media_query.css' %}" />
+    <script src="{% static 'index/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'index/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'index/js/custom.js' %}"></script>
+</head>
+<body>
+</body>
+{% block body %}
+{% endblock %}
+</html>

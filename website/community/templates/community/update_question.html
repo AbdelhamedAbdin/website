@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} Asking your question {% endblock %}
+
+{% block body %}
+    {% if messages %}
+        <div class="title-error">
+            <div class="container">
+                {% for message in messages %}
+                    <div class="alert text-danger alert-danger">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    <div class="ask-question">
+        <div class="container">
+            <h3>Ask a public question</h3>
+            <div class="wall">
+                <form method="post">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <label>{{ field.label }}:</label>
+                            <p>{{ field }}</p>
+                            <p>{{ field.help_text }}</p>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">Set Question</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'base_footer.html' %}
+
+{% endblock %}

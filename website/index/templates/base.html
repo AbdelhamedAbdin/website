@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>{% block title %} Base {% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- First Mobile Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'index/images/title-icon.png' %}" type="image/icon type">
+    <link rel="stylesheet" href="{% static 'index/css/media_query.css' %}" />
+    <link rel="stylesheet" href="{% static 'index/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'index/css/bootstrap.css' %}" />
+    <link rel="stylesheet" href="{% static 'index/css/style.css' %}" />
+    <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+    <script src="{% static 'index/js/html5shiv.min.js' %}"></script>
+    <script src="{% static 'index/js/respond.min.js' %}"></script>
+</head>
+<body>
+    {% load notifications_tags %}
+    {% if not request.user.is_authenticated %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index:index' %}"><h2><span class="text-primary">E</span>s2al</h2></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="home active">
+                        <a href="{% url 'index:index' %}">
+                            <span class="glyphicon glyphicon-home text-center"></span>
+                        <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="about-us"><a href="{% url 'index:about_us' %}"><span class="fa fa-users text-center"></span><span>About Us</span></a></li>
+                    <li class="join-us">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user-o text-center"></span> <span>Join Us!</span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'accounts:register' %}">Register</a></li>
+                            <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index:index' %}"><h2><span class="text-primary">E</span>s2al</h2></a>
+        </div>
+            <form action="{% url 'community:user_questions' %}" class="navbar-form navbar-left search" method="get">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="query" class="form-control" placeholder="Search" value="{{ query }}">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="notify dropdown">
+
+                        {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="fa fa-bell text-center">
+                            {% notifications_unread as unread_count %}
+                                {% if unread_count != 0 %}
+                                    <i class="notify-count">{% live_notify_badge %}</i>
+                                {% endif %}
+                            </span>
+                        Notifications
+                        </a>
+                        <ul class="dropdown-menu inbox list-unstyled">
+                            {% include 'community/notification_view.html' %}
+                        </ul>
+                    </li>
+
+                    <li class="home active">
+                        <a href="{% url 'index:index' %}">
+                            <span class="glyphicon glyphicon-home text-center"></span>
+                        <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="community">
+                        <a href="{% url 'community:user_questions' %}">
+                            <span class="fa fa-wechat text-center"></span>
+                        <span>Community</span>
+                        </a>
+                    </li>
+                    <li class="about-us"><a href="{% url 'index:about_us' %}"><span class="fa fa-info-circle text-center"></span><span>About Us</span></a></li>
+                    <li class="profile-x">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div>
+                                <img style="width: 30px;height: 30px" class="img-rounded" src="
+                                {% if request.user.userprofile.logo %}
+                                    {{ request.user.userprofile.logo.url }}
+                                {% else %}
+                                    {% static 'index/images/default-logo.jpg' %}
+                                {% endif %}
+                                ">
+                                <span>
+                                    {% if request.user.first_name != '' %}
+                                        {{ request.user.first_name|lower }}
+                                    {% else %}
+                                        User
+                                    {% endif %}
+                                </span>
+                                <span class="caret"></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'accounts:view_profile' request.user.userprofile.slug %}">Profile</a></li>
+                            <li><a href="{% url 'community:user_asking' %}">Ask Question</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Settings</li>
+                            <li><a href="{% url 'accounts:edit_profile' request.user.userprofile.slug %}">Edit Profile</a></li>
+                            <li>
+                                <a>
+                                    <form action="{% url 'accounts:remove_user' request.user %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete-user" value="{{ request.user }}">
+                                        <input type="submit" value="Remove Account">
+                                    </form>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    <script src="{% static 'index/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'index/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'index/js/custom.js' %}"></script>
+</body>
+{% block body %}
+{% endblock %}
+</html>
+
+

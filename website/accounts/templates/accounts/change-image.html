@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Add New Image {% endblock %}
+
+{% block body %}
+<!-- Add new image for user-profile -->
+<div class="change-image">
+    <div class="add-image">
+        <div class="container">
+            <h1>This Image Is Current,
+                <br>Choose Your Image From Your Personal Computer Or Delete
+            </h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label>{{ user.first_name }} {{ user.last_name }}</label>
+                {% for src in form.initial.values %}
+                    <img {{ src }}><br>
+                {% endfor %}
+                {% for fields in form.Meta.fields %}
+                    <input type="file" name="{{ fields }}" value="Choose">
+                {% endfor %}
+                <input id="logo-url" class="regular-checkbox big-checkbox" type="checkbox" name="logo-clear">
+                <label for="logo-url">Remove Your Image</label>
+                <button type="submit" class="btn btn-primary btn-lg">Change Now</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

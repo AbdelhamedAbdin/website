@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %} All Questions That People Asked {% endblock %}
+
+{% block body %}
+{% if request.user.is_authenticated %}
+    <div class="all-questions">
+        <div class="container">
+            <div class="fl-left hidden-sm hidden-xs">
+                <h2>All Questions</h2>
+            </div>
+            <div class="fl-right hidden-sm hidden-xs">
+                <a href="{% url 'community:user_asking' %}" class="btn btn-primary btn-lg">Ask Question</a>
+            </div>
+            <div class="clear"></div>
+            <div class="row">
+                <div class="add-q">
+                    <div class="col-sm-12 visible-sm-block visible-xs-block">
+                        <h2>All Questions</h2>
+                    </div>
+                    <div class="col-sm-12 visible-sm-block visible-xs-block">
+                        <a href="{% url 'community:user_asking' %}" class="btn btn-primary btn-lg">Ask Question</a>
+                    </div>
+                </div>
+            {% if all_objects %}
+                <div class="col-sm-12">
+                    <div class="questions">
+                        {% for post in all_objects %}
+                            <div class="q_section">
+                                <a class="text-primary title" href="{% url 'community:question_view' post.ask_slug %}">{{ post.title }}</a>
+                                <p class="field">{{ post.field }}</p>
+                                <div class="info fl-right">
+                                    <span class="time">{{ post.date }}</span> |
+                                    <a href="{% url 'accounts:view_profile' post.userprofile.slug %}" style="font-size:14px">
+
+                                        {% if post.userprofile.user.first_name != '' %}
+                                            {{ post.userprofile.user.first_name }}
+                                        {% else %}
+                                            User
+                                        {% endif %}
+
+                                        <img class="logo-image" style="width:25px;height: 25px" src="
+                                        {% if post.userprofile.logo %}
+                                            {{ post.userprofile.logo.url }}
+                                        {% else %}
+                                            {% load static %}
+                                            {% static 'index/images/default-logo.jpg' %}
+                                        {% endif %}
+                                        ">
+                                    </a>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <h2 class="text-center text-info">No Questions</h2>
+                {% endif %}
+            </div>
+            <!-- Pagination -->
+            {% if all_objects %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if all_objects.has_previous %}
+                        <a href="?page_number=1">&laquo; first</a>
+                        <a href="?page_number={{ all_objects.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ all_objects.number }} of {{ all_objects.paginator.num_pages }}.
+                    </span>
+
+                    {% if all_objects.has_next %}
+                        <a href="?page_number={{ all_objects.next_page_number }}">next</a>
+                        <a href="?page_number={{ all_objects.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'base_footer.html' %}
+
+{% endif %}
+{% endblock %}
